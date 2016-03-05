@@ -117,6 +117,37 @@ def generate_mac(metric):
     print "For pptp on mac only, please copy ip-up and ip-down to the /etc/ppp folder," \
           "don't forget to make them executable with the chmod command."
 
+def generate_shadowvpn(metric):
+    results=fetch_ip_data()
+    
+    upscript_header=textwrap.dedent("""\
+    #!/bin/sh
+    export PATH="/bin:/sbin:/usr/sbin:/usr/bin"
+    """)
+    
+    downscript_header=textwrap.dedent("""\
+    #!/bin/sh
+    export PATH="/bin:/sbin:/usr/sbin:/usr/bin"
+    """)
+    
+    upfile=open('ip-up.sh','w')
+    downfile=open('ip-down.sh','w')
+    
+    upfile.write(upscript_header)
+    upfile.write('\n')
+    downfile.write(downscript_header)
+    downfile.write('\n')
+    
+    for ip,_,mask in results:
+        upfile.write('ip rule add to %s/%s table main\n'%(ip,mask))
+        downfile.write('ip rule del to %s/%s table main\n'%(ip,mask))
+    
+    upfile.close()
+    downfile.close()
+    
+    print "For pptp on mac only, please copy ip-up and ip-down to the /etc/ppp folder," \
+          "don't forget to make them executable with the chmod command."
+
 def generate_win(metric):
     results = fetch_ip_data()  
 
@@ -251,6 +282,8 @@ if __name__=='__main__':
         generate_linux(args.metric)
     elif args.platform.lower() == 'mac':
         generate_mac(args.metric)
+    elif args.platform.lower() == 'shadowvpn':
+        generate_shadowvpn(args.metric)
     elif args.platform.lower() == 'win':
         generate_win(args.metric)
     elif args.platform.lower() == 'android':
