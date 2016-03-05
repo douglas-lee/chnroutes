@@ -1,3 +1,6 @@
+## Updated:
+新增了用于shadowvpn的模块，使用方法：python chnroutes.py -p shadowvpn。
+
 ## 介绍
 
 这几个脚本主要利用来自 http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest 的数据生成路由命令脚本, 让vpn客户端在进行连接的时候自动执行. 通过这些路由脚本, 可以让用户在使用vpn作为默认网络网关的时候, 不使用vpn进行对中国国内ip的访问, 从而减轻vpn的负担, 和增加访问国内网站的速度.
